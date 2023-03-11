@@ -4,6 +4,6 @@ namespace StudentAdminPortal.API.Repository
 {
     public interface IStudentRepository
     {
-        List<Student> GetStudents();
+       Task<List<Student> >GetStudentsAsync();
     }
 }
