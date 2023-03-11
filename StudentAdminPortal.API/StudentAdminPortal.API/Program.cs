@@ -5,7 +5,13 @@ using StudentAdminPortal.API.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+////builder.Services.AddCors (options) =>
+//{
+//    options.AddPolicy("angularApplication", (builder) =>
+//    {
+//        builder.WithOrigin("http://localhost:4200/");
+//    })
+//};
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentAdminContext>(options => options.UseSqlServer("server=LAPTOP-S3S24I8M\\SQLEXPRESS; database=StudentAdminPortalDb; Trusted_Connection=true; TrustServerCertificate=True"));
 builder.Services.AddScoped<IStudentRepository, SqlStudentRepository>();
@@ -22,6 +28,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
