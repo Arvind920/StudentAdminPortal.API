@@ -18,7 +18,7 @@ namespace StudentAdminPortal.API.Controllers
         }
 
         [HttpGet]
-        [Route("[Controller]")]
+        [Route("[controller]")]
         public async Task<IActionResult> GetAllStudentAsync()
         {
            var students= await StudentRepository.GetStudentsAsync();
@@ -26,5 +26,21 @@ namespace StudentAdminPortal.API.Controllers
             return  Ok(mapper.Map<List<Student>>(students));
             
         }
+
+        [HttpGet]
+        [Route("[controller]/{studentId:guid}")]
+        public async Task<IActionResult> GetStudentAsync([FromRoute] Guid studentId)
+        {
+            //Fetch Student Detials
+            var student = await StudentRepository.GetStudentAsync(studentId);
+            if(student == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<Student>(student));
+
+            //Return Student
+        }
+    
     }
 }
