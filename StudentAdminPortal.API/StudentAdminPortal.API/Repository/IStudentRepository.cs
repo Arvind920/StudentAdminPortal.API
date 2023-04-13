@@ -1,4 +1,7 @@
 ﻿using StudentAdminPortal.API.DataModels;
+using StudentAdminPortal.API.DomainModels;
+using Gender = StudentAdminPortal.API.DataModels.Gender;
+using Student = StudentAdminPortal.API.DataModels.Student;
 
 namespace StudentAdminPortal.API.Repository
 {
@@ -6,5 +9,10 @@ namespace StudentAdminPortal.API.Repository
     {
        Task<List<Student> >GetStudentsAsync();
         Task<Student> GetStudentAsync(Guid studentId);
+
+
+        Task<List<Gender>>GetGendersAsync();
+        Task<bool>Exists(Guid atudentId);
+       Task<Student> UpdateStudent(Guid studentId, Student request);
     }
 }
