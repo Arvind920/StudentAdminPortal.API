@@ -4,6 +4,7 @@ using StudentAdminPortal.API.DataModels;
 using StudentAdminPortal.API.DomainModels;
 using StudentAdminPortal.API.Repository;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 using Student = StudentAdminPortal.API.DomainModels.Student;
 
 namespace StudentAdminPortal.API.Controllers
@@ -58,7 +59,19 @@ namespace StudentAdminPortal.API.Controllers
             }
             return NotFound();
         }
-       
+
+        [HttpDelete]
+        [Route("[controller]/{studentId:guid}")]
+        public async Task<IActionResult> DeleteStudentAsync([FromRoute] Guid studentId)
+        {
+            if(await StudentRepository.Exists(studentId))
+            {
+                var student= await StudentRepository.DeleteStudent(studentId);
+                return Ok(mapper.Map<Student>(student));
+            }
+            return NotFound();
+        }
+        
     
     }
 }
