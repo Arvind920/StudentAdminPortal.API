@@ -10,6 +10,7 @@ using Student = StudentAdminPortal.API.DomainModels.Student;
 
 namespace StudentAdminPortal.API.Controllers
 {
+    [ApiController]
     
     public class StudentsController : Controller
     {
@@ -85,24 +86,41 @@ namespace StudentAdminPortal.API.Controllers
         }
         [HttpPost]
         [Route("[controller]/{studentId:guid}/upload-image")]
-        public async Task<IActionResult> UploadImage([FromRoute] Guid studentId,IFormFile profileImage)
+        public async Task<IActionResult> UploadImage([FromRoute] Guid studentId, IFormFile profileImage)
         {
-            //Check if student exist
-            if (await StudentRepository.Exists(studentId))
+            var validationExtensions = new List<string>
             {
-                var fileName= Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
-                //upload image after to local storage
-               var fileImagePath= await imageRepository.Upload(profileImage,fileName);
+                ".jpeg",
+                ".png",
+                ".gif"
+            };
 
-               if(await StudentRepository.UpdateProfileImage(studentId, fileImagePath))
+            if (profileImage != null && profileImage.Length > 0)
+            {
+                var extention = Path.GetExtension(profileImage.FileName);
+                if (validationExtensions.Contains(extention))
                 {
-                    return Ok(fileImagePath);
-                }
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error uploading Image");
 
-                //update the profile image path in the database
+
+                    //Check if student exist
+                    if (await StudentRepository.Exists(studentId))
+                    {
+                        var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
+                        //upload image after to local storage
+                        var fileImagePath = await imageRepository.Upload(profileImage, fileName);
+
+                        if (await StudentRepository.UpdateProfileImage(studentId, fileImagePath))
+                        {
+                            return Ok(fileImagePath);
+                        }
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Error uploading Image");
+
+                        //update the profile image path in the database
+                    }
+                }
+                return BadRequest("This is not a valid Image formate");
             }
-            return NotFound(); 
+            return NotFound();
         }
     
     }
