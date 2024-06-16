@@ -26,6 +26,7 @@ namespace StudentAdminPortal.API.Repository
         public async Task<List<Gender>>GetGendersAsync()
         {
             return await context.Gender.ToListAsync();
+            //Var GenderList =context."Select* from Gender"
         }
 
         public async Task<bool> Exists(Guid studentId)

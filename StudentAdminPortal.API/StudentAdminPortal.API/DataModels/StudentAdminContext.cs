@@ -13,5 +13,5 @@ namespace StudentAdminPortal.API.DataModels
         public DbSet<Gender> Gender { get; set; }
         public DbSet<Address> Address { get; set; }
 
-    }
+    } 
 }
